@@ -1,0 +1,6 @@
+version: '1'
+services:
+  mongodb:
+    image: mongo:latest
+    env_file:
+      - mongo.env
