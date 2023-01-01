@@ -1,0 +1,8 @@
+MESSAGE: id_message, time_message
+:
+
+BELONGS_TO, 01 MESSAGE, 0N CHANNEL, 0N USER
+USER: nickname_user, password_user
+
+CHANNEL: id_channel, name_channel
+IS_IN_CHANNEL, 0N USER, 0N CHANNEL: is_admin

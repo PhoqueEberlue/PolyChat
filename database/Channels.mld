@@ -1,0 +1,16 @@
+%%mocodo
+:
+MESSAGE: id_message, time_message, #id_channel->CHANNEL->id_channel, #nickname_user->USER->nickname_user
+:::
+
+
+:::
+USER: nickname_user, password_user
+:
+
+
+:
+CHANNEL: id_channel, name_channel
+:
+IS_IN_CHANNEL: #nickname_user->USER->nickname_user, _#id_channel->CHANNEL->id_channel, is_admin
+:

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="266" height="254" viewBox="0 0 266 254" xmlns="http://www.w3.org/2000/svg">
+<rect id="frame" x="0" y="0" width="266" height="254" fill="#fff" stroke="none" stroke-width="0"/>
+
+<!-- Association BELONGS_TO -->
+<g class="page_0_XdOY8Okz diagram_page" visibility="visible">
+	<line x1="59" y1="43" x2="59" y2="127" stroke="#d6604d" stroke-width="2"/>
+	<text x="64" y="94" fill="#4d4d4d" font-family="Verdana" font-size="12">0,1</text>
+	<line x1="59" y1="211" x2="59" y2="127" stroke="#d6604d" stroke-width="2"/>
+	<text x="64" y="169" fill="#4d4d4d" font-family="Verdana" font-size="12">0,N</text>
+	<line x1="199" y1="127" x2="59" y2="127" stroke="#d6604d" stroke-width="2"/>
+	<text x="120" y="144" fill="#4d4d4d" font-family="Verdana" font-size="12">0,N</text>
+	<g>
+		<path d="M94 102 a14 14 90 0 1 14 14 V127 h-98 V116 a14 14 90 0 1 14 -14" fill="#f4a582" stroke="#f4a582" stroke-width="0"/>
+		<path d="M108 127 v11 a14 14 90 0 1 -14 14 H24 a14 14 90 0 1 -14 -14 V127 H98" fill="#fddbc7" stroke="#fddbc7" stroke-width="0"/>
+		<rect x="10" y="102" width="98" height="50" fill="none" rx="14" stroke="#d6604d" stroke-width="2"/>
+		<line x1="10" y1="127" x2="108" y2="127" stroke="#d6604d" stroke-width="1"/>
+		<text x="17" y="119.75" fill="#000" font-family="Verdana" font-size="12">BELONGS_TO</text>
+	</g>
+</g>
+
+<!-- Association IS_IN_CHANNEL -->
+<g class="page_0_XdOY8Okz diagram_page" visibility="visible">
+	<line x1="199" y1="127" x2="199" y2="211" stroke="#d6604d" stroke-width="2"/>
+	<text x="204" y="178" fill="#4d4d4d" font-family="Verdana" font-size="12">0,N</text>
+	<line x1="59" y1="211" x2="199" y2="211" stroke="#d6604d" stroke-width="2"/>
+	<text x="114" y="228" fill="#4d4d4d" font-family="Verdana" font-size="12">0,N</text>
+	<g>
+		<path d="M243 186 a14 14 90 0 1 14 14 V211 h-116 V200 a14 14 90 0 1 14 -14" fill="#f4a582" stroke="#f4a582" stroke-width="0"/>
+		<path d="M257 211 v11 a14 14 90 0 1 -14 14 H155 a14 14 90 0 1 -14 -14 V211 H116" fill="#fddbc7" stroke="#fddbc7" stroke-width="0"/>
+		<rect x="141" y="186" width="116" height="50" fill="none" rx="14" stroke="#d6604d" stroke-width="2"/>
+		<line x1="141" y1="211" x2="257" y2="211" stroke="#d6604d" stroke-width="1"/>
+		<text x="149" y="203.75" fill="#000" font-family="Verdana" font-size="12">IS_IN_CHANNEL</text>
+		<text x="148" y="228.8" fill="#000" font-family="Verdana" font-size="12">is_admin</text>
+	</g>
+</g>
+
+<!-- Entity MESSAGE -->
+<g class="page_0_XdOY8Okz diagram_page" visibility="visible">
+	<g>
+		<rect x="9" y="9" width="100" height="25" fill="#bababa" stroke="#bababa" stroke-width="0" opacity="1"/>
+		<rect x="9" y="34" width="100" height="43" fill="#e0e0e0" stroke="#e0e0e0" stroke-width="0" opacity="1"/>
+		<rect x="9" y="9" width="100" height="68" fill="none" stroke="#878787" stroke-width="2" opacity="1"/>
+		<line x1="9" y1="34" x2="109" y2="34" stroke="#878787" stroke-width="1"/>
+	</g>
+	<text x="29" y="26.75" fill="#000" font-family="Verdana" font-size="12">MESSAGE</text>
+	<text x="14" y="51.8" fill="#000" font-family="Verdana" font-size="12">id_message</text>
+	<line x1="14" y1="54" x2="87" y2="54" stroke="#000" stroke-width="1"/>
+	<text x="14" y="68.8" fill="#000" font-family="Verdana" font-size="12">time_message</text>
+</g>
+
+<!-- Entity USER -->
+<g class="page_0_XdOY8Okz diagram_page" visibility="visible">
+	<g>
+		<rect x="147" y="93" width="104" height="25" fill="#bababa" stroke="#bababa" stroke-width="0" opacity="1"/>
+		<rect x="147" y="118" width="104" height="43" fill="#e0e0e0" stroke="#e0e0e0" stroke-width="0" opacity="1"/>
+		<rect x="147" y="93" width="104" height="68" fill="none" stroke="#878787" stroke-width="2" opacity="1"/>
+		<line x1="147" y1="118" x2="251" y2="118" stroke="#878787" stroke-width="1"/>
+	</g>
+	<text x="182" y="110.75" fill="#000" font-family="Verdana" font-size="12">USER</text>
+	<text x="152" y="135.8" fill="#000" font-family="Verdana" font-size="12">nickname_user</text>
+	<line x1="152" y1="138" x2="245" y2="138" stroke="#000" stroke-width="1"/>
+	<text x="152" y="152.8" fill="#000" font-family="Verdana" font-size="12">password_user</text>
+</g>
+
+<!-- Entity CHANNEL -->
+<g class="page_0_XdOY8Okz diagram_page" visibility="visible">
+	<g>
+		<rect x="9" y="177" width="100" height="25" fill="#bababa" stroke="#bababa" stroke-width="0" opacity="1"/>
+		<rect x="9" y="202" width="100" height="43" fill="#e0e0e0" stroke="#e0e0e0" stroke-width="0" opacity="1"/>
+		<rect x="9" y="177" width="100" height="68" fill="none" stroke="#878787" stroke-width="2" opacity="1"/>
+		<line x1="9" y1="202" x2="109" y2="202" stroke="#878787" stroke-width="1"/>
+	</g>
+	<text x="30" y="194.75" fill="#000" font-family="Verdana" font-size="12">CHANNEL</text>
+	<text x="14" y="219.8" fill="#000" font-family="Verdana" font-size="12">id_channel</text>
+	<line x1="14" y1="222" x2="80" y2="222" stroke="#000" stroke-width="1"/>
+	<text x="14" y="236.8" fill="#000" font-family="Verdana" font-size="12">name_channel</text>
+</g>
+</svg>

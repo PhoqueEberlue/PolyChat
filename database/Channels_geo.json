@@ -1,0 +1,26 @@
+{
+  "width": 266,
+  "height": 254,
+  "cx": [
+    [ "MESSAGE", 59 ],
+    [ "BELONGS_TO", 59 ],
+    [ "USER", 199 ],
+    [ "CHANNEL", 59 ],
+    [ "IS_IN_CHANNEL", 199 ]
+  ],
+  "cy": [
+    [ "MESSAGE", 43 ],
+    [ "BELONGS_TO", 127 ],
+    [ "USER", 127 ],
+    [ "CHANNEL", 211 ],
+    [ "IS_IN_CHANNEL", 211 ]
+  ],
+  "shift": [
+    [ "BELONGS_TO,MESSAGE,0", 0 ],
+    [ "BELONGS_TO,CHANNEL,0", 0 ],
+    [ "BELONGS_TO,USER,0", 0 ],
+    [ "IS_IN_CHANNEL,USER,0", 0 ],
+    [ "IS_IN_CHANNEL,CHANNEL,0", 0 ]
+  ],
+  "ratio": []
+}
