@@ -1,0 +1,27 @@
+{
+  "name": "polychat",
+  "version": "1.0.0",
+  "description": "School project implementing an instant messaging application with a backend database.",
+  "main": "src/database/main.js",
+  "scripts": {
+    "db-test": "node src/database/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/database/* --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhoqueEberlue/PolyChat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PhoqueEberlue/PolyChat/issues"
+  },
+  "homepage": "https://github.com/PhoqueEberlue/PolyChat#readme",
+  "dependencies": {
+    "mariadb": "^3.0.2"
+  },
+  "devDependencies": {
+    "prettier-eslint": "^15.0.1"
+  }
+}
