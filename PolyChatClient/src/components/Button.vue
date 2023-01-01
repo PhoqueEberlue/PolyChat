@@ -1,13 +1,13 @@
 <script setup>
 defineProps({
-	name:{
-	type:String,
-	default:"FIXME"
+	name: {
+		type: String,
+		default: "FIXME",
 	},
-	url:{
-	type:String,
-	default:"FIXME"
-	}
+	url: {
+		type: String,
+		default: "FIXME",
+	},
 });
 </script>
 
@@ -21,12 +21,12 @@ defineProps({
 a {
 	font-size: 1.2rem;
 	text-align: center;
-	background-color:#1daae2;
-	border-radius:20px;
-	color:black;
-	padding:5px;
-	margin-left:70px;
-	margin-right:70px;
+	background-color: #1daae2;
+	border-radius: 20px;
+	color: black;
+	padding: 5px;
+	margin-left: 70px;
+	margin-right: 70px;
 }
 
 @media (min-width: 1024px) {

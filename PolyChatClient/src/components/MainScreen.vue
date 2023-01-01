@@ -1,9 +1,9 @@
 <script setup>
 defineProps({
-	msg:{
-	type:String,
-	default:"PolyChat"
-	}
+	msg: {
+		type: String,
+		default: "PolyChat",
+	},
 });
 </script>
 
@@ -11,11 +11,10 @@ defineProps({
 	<div class="greetings">
 		<h1 class="blue">{{ msg }}</h1>
 		<h3>
-			This is a student project aimed at recreating a chat (discord / messenger like)
-			written in javascript +
-			<a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a> 
-			for the front end.
-			Backend is written in node.js
+			This is a student project aimed at recreating a chat (discord / messenger
+			like) written in javascript +
+			<a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>
+			for the front end. Backend is written in node.js
 		</h3>
 	</div>
 </template>
@@ -27,8 +26,8 @@ h1 {
 	top: -10px;
 }
 
-h1:hover{
-	color:#173aad;
+h1:hover {
+	color: #173aad;
 }
 
 h3 {

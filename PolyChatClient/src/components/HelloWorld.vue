@@ -11,11 +11,10 @@ defineProps({
 	<div class="greetings">
 		<h1 class="blue">{{ msg }}</h1>
 		<h3>
-			This is a student project aimed at recreating a chat (discord / messenger like)
-			written in javascript +
-			<a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a> 
-			for the front end.
-			Backend is written in node.js
+			This is a student project aimed at recreating a chat (discord / messenger
+			like) written in javascript +
+			<a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>
+			for the front end. Backend is written in node.js
 		</h3>
 	</div>
 </template>

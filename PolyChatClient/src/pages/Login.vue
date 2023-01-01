@@ -1,14 +1,14 @@
 <script setup>
 defineProps({
-	name:{
-	type:String,
-	default:"PolyChat"
-	}
+	name: {
+		type: String,
+		default: "PolyChat",
+	},
 });
 </script>
 
 <template>
-	<input v-model="text">
+	<input v-model="text" />
 </template>
 
 <style scoped>

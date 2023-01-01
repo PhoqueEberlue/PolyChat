@@ -1,6 +1,4 @@
 <script setup>
-import HelloWorld from "../components/HelloWorld.vue";
-import TheWelcome from "../components/TheWelcome.vue";
 import MainScreen from "../components/MainScreen.vue";
 import Button from "../components/Button.vue";
 </script>
@@ -8,9 +6,9 @@ import Button from "../components/Button.vue";
 <template>
 	<header>
 		<img
-			alt="Vue logo"
+			alt="Polytech logo"
 			class="logo"
-			src="../assets/polytech.png"
+			src="./assets/polytech.png"
 			width="125"
 			height="125"
 		/>
@@ -21,19 +19,17 @@ import Button from "../components/Button.vue";
 	</header>
 	<main>
 		<div class="grid">
-			<Button name=Login url="login"/>
-			<Button name=Signup url="signup"/>
+			<Button name="Login" url="login" />
+			<Button name="Signup" url="signup" />
 		</div>
 	</main>
-
-
 </template>
 
 <style scoped>
 header {
 	line-height: 1.5;
-	place-items:center;
-	display:flex;
+	place-items: center;
+	display: flex;
 }
 
 .logo {
@@ -59,7 +55,7 @@ header {
 	}
 
 	main {
-		padding-top:50px;
+		padding-top: 50px;
 	}
 }
 </style>
