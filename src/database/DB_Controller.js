@@ -2,40 +2,49 @@ const mariadb = require('mariadb');
 const {readFile} = require("fs/promises")
 const sha256 = require("js-sha256").sha256;
 
-const parseCredentials = async () => {
-    const data = await readFile('./database/credentials.json');
-    return JSON.parse(data);
-};
-
-const initDBConnection = async () => {
-    let credentials = await parseCredentials();
-
-    const pool = mariadb.createPool({
-        host: credentials['host'],
-        user: credentials['user'],
-        password: credentials['password'],
-        connectionLimit: 5,
-        trace: true // for debug purposes
-    });
-
-    let conn;
-    try {
-        conn = await pool.getConnection();
-        const rows = await conn.query('use POLYCHAT');
-    } catch (err) {
-        throw err;
-    } finally {
-        if (conn) await conn.end();
-    }
-
-    return conn;
-};
-
 
 class DB_Controller {
-    constructor(conn) {
-        this.conn = conn
+    /*
+    Controller of the database, must call initDBConnection before using other functions.
+     */
+    constructor() {
     }
+
+    async parseCredentials() {
+        /*
+        Parse credentials in PolyChat/database/credentials.json
+        FIX: Might cause some problems if node is not run from the root of the project.
+         */
+        const data = await readFile('./database/credentials.json');
+        return JSON.parse(data);
+    }
+
+    async initDBConnection() {
+        /*
+        Connects to the database
+         */
+        const credentials = await this.parseCredentials();
+
+        const pool = mariadb.createPool({
+            host: credentials['host'],
+            user: credentials['user'],
+            password: credentials['password'],
+            connectionLimit: 5,
+            trace: true // for debug purposes
+        });
+
+        let conn;
+        try {
+            conn = await pool.getConnection();
+            await conn.query('use POLYCHAT');
+        } catch (err) {
+            throw err;
+        } finally {
+            if (conn) await conn.end();
+        }
+
+        this.conn = conn;
+    };
 
     async createUser(nickname_user, password_user) {
         /*
@@ -58,6 +67,22 @@ class DB_Controller {
         }
     }
 
+    async checkCredentialsUser(nickname_user, password_user) {
+        /*
+        Checks if the credentials provided by a user are correct.
+        Returns true if the credentials match a user in the database, false otherwise.
+         */
+
+        // Encrypt password
+        let hash = sha256.create();
+        hash.update(password_user);
+        let encrypted_password = hash.hex();
+
+        // Select user and check if password matches
+        let res = await this.conn.query("SELECT * FROM USER WHERE nickname_user = ? and password_user = ?", [nickname_user, encrypted_password]);
+        return res[0] !== undefined;
+    }
+
     async createChannel(channel_name, nickname_user) {
         /*
         Create a channel
@@ -77,7 +102,7 @@ class DB_Controller {
             [nickname_user, id_channel, is_admin])
     }
 
-    async removeUserInChannel(id_channel, nickname_user_to_delete, nickname_user_admin) {
+    async removeUserFromChannel(id_channel, nickname_user_to_delete, nickname_user_admin) {
         /*
         Removes a user from a Channel.
         Returns false if the user that requested the deletion was not admin of the channel, true otherwise.
@@ -103,16 +128,22 @@ class DB_Controller {
 
         return res[0]['is_admin']
     }
+
+    async createMessage(id_channel, nickname_sender, content) {
+        /*
+        Stores a new message in the database
+         */
+        await this.conn.query("INSERT INTO MESSAGE(content_message, time_message, id_channel, nickname_user) VALUES(?, ?, ?, ?)",
+            [content, new Date().toISOString().slice(0, 19).replace('T', ' '), id_channel, nickname_sender])
+    }
+
+    async getChannelsOfUser(nickname_user) {
+        /*
+        Returns every channel the user is in
+         */
+        return await this.conn.query("SELECT id_channel, name_channel FROM IS_IN_CHANNEL NATURAL JOIN CHANNEL WHERE nickname_user = ?", [nickname_user]);
+    }
+
 }
 
-
-(async () => {
-    const conn = await initDBConnection();
-
-    const db_controller = new DB_Controller(conn);
-    // await db_controller.createUser("test3", "aonstuh");
-
-    //await db_controller.createChannel("AYAYA", "test3");
-    //await db_controller.addUserInChannel(10, "test2", false);
-    //await db_controller.removeUserInChannel(10, 'test2', "test3");
-})();
+module.exports = {DB_Controller}
