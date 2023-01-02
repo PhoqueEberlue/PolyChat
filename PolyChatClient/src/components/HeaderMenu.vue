@@ -2,76 +2,94 @@
 import Button from "./Button.vue";
 import { MDBNavbar, MDBNavbarNav, MDBDropdownItem,
 	MDBDropdown, MDBCollapse, MDBNavbarToggler, 
-	MDBNavbarItem, MDBDropdownMenu, MDBDropdownToggle } from "mdb-vue-ui-kit";
+	MDBNavbarItem, MDBDropdownMenu, MDBDropdownToggle,
+	MDBNavbarBrand} from "mdb-vue-ui-kit";
 </script>
 
 <template>
-	<div class="nav">
-	<div class="void"> </div>
-  <MDBNavbar expand="lg" light bg="light" container>
-    <!-- Collapsible wrapper -->
-    <MDBCollapse v-model="collapse5" id="navbarRightAlignExample">
-      <MDBNavbarNav right class="mb-2 mb-lg-0">
-        <!-- Right links -->
-        <MDBNavbarItem to="/login" active>
-          Home
-        </MDBNavbarItem>
-        <MDBNavbarItem href="#" active>
-          Link
-        </MDBNavbarItem>
-        <!-- Navbar dropdown -->
-        <MDBDropdown class="nav-item" v-model="dropdown8">
-          <MDBDropdownToggle
-            tag="a"
-            class="nav-link"
-            @click="dropdown8 = !dropdown8"
-            >Dropdown</MDBDropdownToggle
-          >
-          <MDBDropdownMenu>
-            <MDBDropdownItem href="#">Action</MDBDropdownItem>
-            <MDBDropdownItem href="#">Another Action</MDBDropdownItem>
-            <MDBDropdownItem href="#"
-              >Something else here</MDBDropdownItem
-            >
-          </MDBDropdownMenu>
-        </MDBDropdown>
-        <MDBNavbarItem
-          to="#"
-          disabled
-          tabindex="-1"
-          aria-disabled="true"
-        >
-          Disabled
-        </MDBNavbarItem>
-        <!-- Right links -->
-      </MDBNavbarNav>
-    </MDBCollapse>
-    <!-- Collapsible wrapper -->
-  </MDBNavbar>
+	<div class="bgNav">
+		<div class="nav">
+			<MDBNavbar light bg="light" expand="xxl" container>
+				<MDBNavbarBrand href="/">
+					<img
+						src="../assets/polytech.png"
+						height="30"
+						alt=""
+						loading="lazy"
+						class="btn"
+					/>
+					<span style="padding-left:10px"/>
+					PolyChat
+				</MDBNavbarBrand>
+				<div class="void"> </div>
+				<MDBNavbarNav collapse="navbarNav">
+					<Button class="btn" name="Signup" url="/signup" />
+				</MDBNavbarNav>
+			</MDBNavbar>
+		</div>
 	</div>
 </template>
 
-<style>
+<style scoped>
 ul {
- display:grid;
- grid-template-columns: 1fr 1fr 1fr 1fr;
+	display:flex;
+	align-items: center;
+	justify-content: right;
 }
-.nav {
+
+.btn {
+	margin-right: 0px;
+	margin-left: 0px;
+	margin-top: 5px
+
+}
+
+a {
+	display:flex;
+	font-size: 20px;
+	margin-top: 5px;
+	margin-left:10px;
+}
+
+nav, .nav {
 	position: fixed;
-	display: grid;
-	grid-template-columns: 70vw 30vw;
+	display: flex;
 	top: 0;
 	left: 0;
 	width: 100vw;
+	border: .5vw solid #111;
+	background-color: #111;
 }
 
 .void {
-	
+	display: none;
 }
-/*@media (min-width: 1024px) {
-	.top-header{
-		
+
+@media (min-width: 1024px) {
+	.void{
+		display: block;
 	}
 }
-*/
+
+</style>
+
+<style>
+
+.container-fluid {
+	display: grid;
+	width:100vw;
+	grid-template-columns: 250px calc(100% - 250px - 1vw);
+}
+
+@media (min-width: 1024px) {
+
+	.container-fluid {
+		display: grid;
+		width:100vw;
+		grid-template-columns: 250px 70vw calc(30% - 250px - 1vw);
+	}
+}
+
+
+
 </style>
