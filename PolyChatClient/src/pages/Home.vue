@@ -4,37 +4,40 @@ import Button from "../components/Button.vue";
 </script>
 
 <template>
-	<header>
-		<img
-			alt="Polytech logo"
-			class="logo"
-			src="./assets/polytech.png"
-			width="125"
-			height="125"
-		/>
+	<div class="wrapper">
+		<div>
+			<header>
+				<img
+					alt="Polytech logo"
+					class="logo"
+					src="../assets/polytech.png"
+					width="125"
+					height="125"
+				/>
 
-		<div class="wrapper">
-			<MainScreen msg="PolyChat" />
+				<div class="wrapper">
+					<MainScreen msg="PolyChat" />
+				</div>
+			</header>
+			<main>
+				<div class="grid">
+					<Button name="Login" url="login" />
+					<Button name="Signup" url="signup" />
+				</div>
+			</main>
 		</div>
-	</header>
-	<main>
-		<div class="grid">
-			<Button name="Login" url="login" />
-			<Button name="Signup" url="signup" />
-		</div>
-	</main>
+	</div>
 </template>
 
 <style scoped>
-header {
-	line-height: 1.5;
-	place-items: center;
-	display: flex;
-}
 
 .logo {
 	display: block;
 	margin: 0 auto 2rem;
+}
+
+.wrapper{
+	place-items: center;
 }
 
 @media (min-width: 1024px) {
