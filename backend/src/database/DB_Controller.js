@@ -1,6 +1,8 @@
-const mariadb = require('mariadb');
+const mariadb = require("mariadb");
 const {readFile} = require("fs/promises")
 const sha256 = require("js-sha256").sha256;
+const { exec } = require("child_process");
+
 
 
 class DB_Controller {
@@ -8,27 +10,28 @@ class DB_Controller {
     Controller of the database, must call initDBConnection before using other functions.
      */
     constructor() {
+			this.path = "../../database/credentials";
     }
 
-    async parseCredentials() {
+    async parseCredentials(path) {
         /*
         Parse credentials in PolyChat/database/credentials.json
         FIX: Might cause some problems if node is not run from the root of the project.
          */
-        const data = await readFile('./database/credentials.json');
-        return JSON.parse(data);
+
+        this.credentials = require(`${path}`);//surely nothing bad could happen Clueless
     }
 
     async initDBConnection() {
         /*
         Connects to the database
          */
-        const credentials = await this.parseCredentials();
+        await this.parseCredentials(this.path);
 
         const pool = mariadb.createPool({
-            host: credentials['host'],
-            user: credentials['user'],
-            password: credentials['password'],
+            host: this.credentials['host'],
+            user: this.credentials['user'],
+            password: this.credentials['password'],
             connectionLimit: 5,
             trace: true // for debug purposes
         });

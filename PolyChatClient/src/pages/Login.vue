@@ -20,15 +20,29 @@ defineProps({
 		methods : {
 			onSubmit(e){
 				e.preventDefault()
-				if(!this.username || !this.password){
-					console.log('Please Add a Name and password');
-					return;
-				}
+			//	if(!this.username || !this.password){
+			//		console.log('Please Add a Name and password');
+			//		return;
+			//	}
+
 				const newInformation = {
-					username : this.username,
-					password : this.password,
+					"username" : "yes",
+					"password" : "cum"
 				}
-				console.log(newInformation);
+
+				const requestOptions = {
+					method: "POST",
+			    headers: {
+			        "Content-Type": "application/json"
+			    },
+					body: JSON.stringify(newInformation),
+					mode:"no-cors"
+				};
+
+				fetch("http://localhost:3000/login", requestOptions);
+
+				console.log(requestOptions);
+				
 				this.username = ' ';
 				this.password = ' ';
 			}
