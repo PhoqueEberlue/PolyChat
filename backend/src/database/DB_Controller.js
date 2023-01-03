@@ -147,6 +147,13 @@ class DB_Controller {
         return await this.conn.query("SELECT id_channel, name_channel FROM IS_IN_CHANNEL NATURAL JOIN CHANNEL WHERE nickname_user = ?", [nickname_user]);
     }
 
+    async getAllChannels() {
+        /*
+        Returns all channels of the app
+         */
+        return await this.conn.query("SELECT id_channel, name_channel FROM CHANNEL", []);
+    }
+
 }
 
 module.exports = {DB_Controller}
