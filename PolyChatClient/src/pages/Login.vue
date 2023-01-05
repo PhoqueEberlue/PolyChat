@@ -11,37 +11,36 @@ defineProps({
 <script>
 	export default {
 		username : 'AddInformation',
-		data (){
-			return {
+		data: () => ({
 				username : '',
 				password: '',
-			}
-		},
+				res: null,
+				notAuth: null
+		}),
 		methods : {
-			onSubmit(e){
+			async onSubmit(e){
 				e.preventDefault()
-			//	if(!this.username || !this.password){
-			//		console.log('Please Add a Name and password');
-			//		return;
-			//	}
 
 				const newInformation = {
-					"username" : "yes",
-					"password" : "cum"
+					"username" : this.username,
+					"password" : this.password
 				}
 
 				const requestOptions = {
 					method: "POST",
 			    headers: {
-			        "Content-Type": "application/json"
+			        "Content-Type": "application/json",
+							"Access-Control-Allow-Origin": "*",
+							"Access-Control-Allow-Methods": "*",
+							"Access-Control-Allow-Headers": "Content-Type, Authorization",
+							"Access-Control-Allow-Credentials": "true"
 			    },
-					body: JSON.stringify(newInformation),
-					mode:"no-cors"
+					body: JSON.stringify(newInformation)
 				};
 
-				fetch("http://localhost:3000/login", requestOptions);
-
-				console.log(requestOptions);
+				this.res = await (await (await fetch("http://localhost:3000/login", requestOptions)).json())["authentified"] == true ? true : false;
+				this.notAuth = !this.res;
+				console.log(this.res);
 				
 				this.username = ' ';
 				this.password = ' ';
@@ -52,26 +51,52 @@ defineProps({
 
 <template>
 	<div class="wrapper">
+
 		<form @submit="onSubmit">
 			<HeaderMenu />
 			<h3> Username</h3>
-			<input class="" v-model="username" name="username" />
+			<input class="text" v-model="username" name="username" />
 			<h3> Password</h3>
-			<input class="" v-model="password" name="password" />
-			<input type="submit" value="Log in" class="btn" />
+			<input class="text" v-model="password" name="password" />
+			<div class="flex">
+				<input type="submit" value="Log in" class="btn" />
+			</div>
 		</form>
+
+		<div class="flex" v-if="res">
+			<h3 class="auth"> Authentified ! </h3>
+			<router-link to="/channel"> click here to get redirected </router-link>
+		</div>
+		<div class="flex" v-else-if="notAuth">
+			<h3 class="notAuth"> Unvalid credentials.</h3>
+			<router-link to="/signup"> Please signup if necessaray. </router-link>
+		</div>
+
 	</div>
 </template>
 
 <style scoped>
-input {
+input.text {
 	display: flex;
+	width: 20vw;
 }
 
 @media (min-width: 1024px) {
 	input {
 		display: flex;
 	}
+}
+
+h3.auth {
+	color:green;
+}
+h3.notAuth {
+	color:red;
+}
+
+.flex{
+	display: flex;
+	justify-content: center;
 }
 
 

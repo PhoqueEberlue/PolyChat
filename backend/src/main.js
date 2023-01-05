@@ -1,4 +1,5 @@
 let express = require('express');
+let cors = require('cors');
 let bodyParser = require('body-parser');
 
 const db_controller = require('./database/DB_Controller');
@@ -9,6 +10,7 @@ let app = express();
 
 app.use(bodyParser.json({type: ['application/json', 'text/plain']}));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 
 app.post('/signup', (req, res) => { // Specifies which URL to listen for
@@ -23,20 +25,14 @@ app.post('/login', (req, res) => {
 	console.log(req.body);
 	let username = req.body.username;
 	let password = req.body.password;
-})
 
-
-	
-app.get('/login', (req, res) => {
-	console.log("something");
-
-	console.log(req.headers);
-  res.send('Hello World!')
-
-})
+	controller.checkCredentialsUser(username, password).then((check) => {
+		console.log("LOGIN: " + check)
+		res.send(JSON.stringify({authentified: check}) + "\n");
+	});
+});
 
 app.listen(3000);
-
 
 // SOCKETS
 //import { Server } from "socket.io"; // Lmao' can't import outside modules?? wtf js
