@@ -1,7 +1,3 @@
-<template>
-
-</template>
-
 <script>
 import io from 'socket.io-client';
 
@@ -55,6 +51,13 @@ export default {
   }
 }
 </script>
+
+<template>
+	<div>
+		<h3>channel {{ $route.params.id }} </h3>
+		<h3>yes {{ $cookies.get(username) }} </h3>
+	</div>
+</template>
 
 <style scoped>
 

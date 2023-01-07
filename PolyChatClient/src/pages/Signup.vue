@@ -3,7 +3,7 @@ import HeaderMenu from "../components/HeaderMenu.vue";
 defineProps({
 	name: {
 		type: String,
-		default: "PolyChat",
+		default: "PolyCi",
 	},
 });
 </script>
@@ -21,8 +21,6 @@ defineProps({
 			async onSubmit(e){
 				e.preventDefault()
 
-				this.username = "Melenchon";
-				this.password = "LAREPUBLIQUECESTMOI";
 				const newInformation = {
 					"username" : this.username,
 					"password" : this.password
@@ -40,14 +38,8 @@ defineProps({
 					body: JSON.stringify(newInformation)
 				};
 
-				this.res = await (await (await fetch("http://localhost:3000/login", requestOptions)).json())["authentified"] == true ? true : false;
-
+				this.res = await (await (await fetch("http://localhost:3000/signup", requestOptions)).json())["authentified"] == true ? true : false;
 				this.notAuth = !this.res;
-
-				if(this.res){
-					$cookies.set("username", this.username);
-					window.location.href = "/channel/";
-				}
 				console.log(this.res);
 				
 				this.username = ' ';
@@ -72,7 +64,7 @@ defineProps({
 		</form>
 
 		<div class="flex" v-if="res">
-			<h3 class="auth"> Loged In ! </h3>
+			<h3 class="auth"> Authentified ! </h3>
 			<router-link to="/channel"> click here to get redirected </router-link>
 		</div>
 		<div class="flex" v-else-if="notAuth">
