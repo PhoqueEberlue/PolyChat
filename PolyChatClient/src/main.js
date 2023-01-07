@@ -9,12 +9,14 @@ import Home from "@/pages/Home.vue";
 import Channel from "@/pages/Channel.vue";
 
 import "./assets/main.css";
+import Channels from "@/pages/Channels.vue";
 
 
 const routes = [
 	{ name: "root", path: "/", component: Home },
 	{ name: "login", path: "/login", component: Login },
 	{ name: "signup", path: "/signup", component: Signup },
+	{ name: "channels", path: "/channels", component: Channels },
 	{ name: "channel", path: "/channel", component: Channel,
 		children:[{
 			path: "/channel/:id", component: Channel,

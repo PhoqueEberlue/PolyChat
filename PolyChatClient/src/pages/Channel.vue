@@ -8,31 +8,21 @@ export default {
       // Defining our socket
       socket: io("http://localhost:4500"),
       users: [],
-			user: "no"
+			user: "no",
+      channel_id: 'tmp',
     }
   },
 	mounted(){
 		console.log("user : ", this.user)
 	},
   created() {
+    this.channel_id = window.location.href.split("/").pop();
+
     // HARD CODED USER FOR TEST PURPOSES
     /* ------------- SETUP LISTENERS ------------- */
 
 
 		this.user = $cookies.get("username");
-    // Listen greetings of the ~ lovely ~ server UwU
-    this.socket.on("greetings", (arg) => {
-      console.log("Connected to the server");
-      // Send greetings back
-      this.socket.emit("greetings-back", `Wesh wesh cane a peche, c'est moi ${this.user}`);
-    })
-
-    // Listen the return of the get channel call
-    this.socket.on("return-get-channel", (list_channel) => {
-      // Gets the list of the channels
-      console.log(list_channel);
-    })
-
     // Listen the return of the connect channel call
     this.socket.on("return-connect-channel", (connected_users_nicknames) => {
       // Gets the list of the connected users
@@ -41,25 +31,36 @@ export default {
 
     // Listen new messages sent by other users (including yourself, need to fix this later)
     this.socket.on("receive-message-channel", (nickname_user, id_channel, content) => {
-      console.log(`[${id_channel}][${nickname_user}]: ${content}`);
+      let message_elem = document.createElement("div");
+      message_elem.innerHTML = `[${nickname_user}]: ${content}`;
+      document.getElementById("messages").appendChild(message_elem);
     })
 
-    /* ------------- Executing on page load requests ------------- */
+    // Send a connect request
+    this.socket.emit("connect-channel", this.channel_id, this.user);
 
-    // Request the channels the user is in
-    this.socket.emit("get-channel", this.user);
+  },
+  methods: {
+    sendMessage: function () {
+      let message = document.getElementById("inputMessage").value;
+      let message_elem = document.createElement("div");
+      message_elem.innerHTML = `[You] ${message}`;
+      document.getElementById("messages").appendChild(message_elem);
 
-
-    // The following calls are for test purposes, they need to be summoned by user input
-    this.socket.emit("connect-channel", "1", this.user); // When clicking on a channel for example (could redirect to a new page or change the current one)
-    this.socket.emit("send-message-channel", this.user, "1", "Bonjour a tous mes petits gauchistes"); // When pressing enter / send message button
+      this.socket.emit("send-message-channel", this.user, this.channel_id, message); // When pressing enter / send message button
+      document.getElementById("inputMessage").value = "";
+    }
   }
 }
 </script>
 
 <template>
+  <div id="messages">
+
+  </div>
 	<div>
-		<h3>yes {{ this.user }} </h3>
+    <input id="inputMessage">
+    <button id="sendMessage" v-on:click="sendMessage">Envoyer</button>
 	</div>
 </template>
 

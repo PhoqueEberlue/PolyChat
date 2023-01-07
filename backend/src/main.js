@@ -117,8 +117,10 @@ io.on("connection", (socket) => {
 
 		// Loop through each connected users socket of the current channel
 		for (let user in channel["connected_users"]) {
-			// Send the message to the current user
-			channel["connected_users"][user]["socket_obj"].emit("receive-message-channel", nickname_user, id_channel, content);
+			if (channel["connected_users"][user]["nickname_user"] !== nickname_user) {
+				// Send the message to the current user
+				channel["connected_users"][user]["socket_obj"].emit("receive-message-channel", nickname_user, id_channel, content);
+			}
 		}
 	});
 })

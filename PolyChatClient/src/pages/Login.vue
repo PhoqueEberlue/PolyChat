@@ -1,112 +1,116 @@
 <script setup>
 import HeaderMenu from "../components/HeaderMenu.vue";
+
 defineProps({
-	name: {
-		type: String,
-		default: "PolyChat",
-	},
+  name: {
+    type: String,
+    default: "PolyChat",
+  },
 });
 </script>
 
 <script>
-	export default {
-		username : 'AddInformation',
-		data: () => ({
-				username : '',
-				password: '',
-				res: null,
-				notAuth: null
-		}),
-		methods : {
-			async onSubmit(e){
-				e.preventDefault()
+export default {
+  username: 'AddInformation',
+  data: () => ({
+    //username : '',
+    //password: '',
+    res: null,
+    notAuth: null
+  }),
+  methods: {
+    async onSubmit(e) {
+      e.preventDefault()
 
-				this.username = "Melenchon";
-				this.password = "LAREPUBLIQUECESTMOI";
-				const newInformation = {
-					"username" : this.username,
-					"password" : this.password
-				}
+      let usr_name = document.getElementsByName("username")[0].value;
+      let pssword = document.getElementsByName("password")[0].value;
+      console.log(usr_name);
+      console.log(pssword);
 
-				const requestOptions = {
-					method: "POST",
-			    headers: {
-			        "Content-Type": "application/json",
-							"Access-Control-Allow-Origin": "*",
-							"Access-Control-Allow-Methods": "*",
-							"Access-Control-Allow-Headers": "Content-Type, Authorization",
-							"Access-Control-Allow-Credentials": "true"
-			    },
-					body: JSON.stringify(newInformation)
-				};
+      const newInformation = {
+        "username": usr_name,
+        "password": pssword
+      }
 
-				this.res = await (await (await fetch("http://localhost:3000/login", requestOptions)).json())["authentified"] == true ? true : false;
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Allow-Credentials": "true"
+        },
+        body: JSON.stringify(newInformation)
+      };
 
-				this.notAuth = !this.res;
+      this.res = await (await (await fetch("http://localhost:3000/login", requestOptions)).json())["authentified"] == true ? true : false;
 
-				if(this.res){
-					$cookies.set("username", this.username);
-					window.location.href = "/channel/";
-				}
-				console.log(this.res);
-				
-				this.username = ' ';
-				this.password = ' ';
-			}
-		}
-	}
+      this.notAuth = !this.res;
+
+      if (this.res) {
+        $cookies.set("username", this.username);
+        window.location.href = "/channel/";
+      }
+      console.log(this.res);
+
+      this.username = ' ';
+      this.password = ' ';
+    }
+  }
+}
 </script>
 
 <template>
-	<div class="wrapper">
+  <div class="wrapper">
 
-		<form @submit="onSubmit">
-			<HeaderMenu />
-			<h3> Username</h3>
-			<input class="text" v-model="username" name="username" />
-			<h3> Password</h3>
-			<input class="text" v-model="password" name="password" />
-			<div class="flex">
-				<input type="submit" value="Log in" class="btn" />
-			</div>
-		</form>
+    <form @submit="onSubmit">
+      <HeaderMenu/>
+      <h3> Username</h3>
+      <input class="text" v-model="username" name="username"/>
+      <h3> Password</h3>
+      <input class="text" v-model="password" name="password"/>
+      <div class="flex">
+        <input type="submit" value="Log in" class="btn"/>
+      </div>
+    </form>
 
-		<div class="flex" v-if="res">
-			<h3 class="auth"> Loged In ! </h3>
-			<router-link to="/channel"> click here to get redirected </router-link>
-		</div>
-		<div class="flex" v-else-if="notAuth">
-			<h3 class="notAuth"> Unvalid credentials.</h3>
-			<router-link to="/signup"> Please signup if necessaray. </router-link>
-		</div>
+    <div class="flex" v-if="res">
+      <h3 class="auth"> Loged In ! </h3>
+      <router-link to="/channel"> click here to get redirected</router-link>
+    </div>
+    <div class="flex" v-else-if="notAuth">
+      <h3 class="notAuth"> Unvalid credentials.</h3>
+      <router-link to="/signup"> Please signup if necessaray.</router-link>
+    </div>
 
-	</div>
+  </div>
 </template>
 
 <style scoped>
 input.text {
-	display: flex;
-	width: 20vw;
+  display: flex;
+  width: 20vw;
 }
 
 @media (min-width: 1024px) {
-	input {
-		display: flex;
-	}
+  input {
+    display: flex;
+  }
 }
 
 h3.auth {
-	color:green;
+  color: green;
 }
+
 h3.notAuth {
-	color:red;
+  color: red;
 }
 
-.flex{
-	display: flex;
-	justify-content: center;
+.flex {
+  display: flex;
+  justify-content: center;
 }
-
 
 
 </style>
