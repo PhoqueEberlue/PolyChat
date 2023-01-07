@@ -13,8 +13,8 @@ defineProps({
 export default {
   username: 'AddInformation',
   data: () => ({
-    //username : '',
-    //password: '',
+    username : '',
+    password: '',
     res: null,
     notAuth: null
   }),
@@ -22,14 +22,9 @@ export default {
     async onSubmit(e) {
       e.preventDefault()
 
-      let usr_name = document.getElementsByName("username")[0].value;
-      let pssword = document.getElementsByName("password")[0].value;
-      console.log(usr_name);
-      console.log(pssword);
-
       const newInformation = {
-        "username": usr_name,
-        "password": pssword
+        "username": this.username,
+        "password": this.password
       }
 
       const requestOptions = {
@@ -53,9 +48,6 @@ export default {
         window.location.href = "/channel/";
       }
       console.log(this.res);
-
-      this.username = ' ';
-      this.password = ' ';
     }
   }
 }
@@ -67,9 +59,9 @@ export default {
     <form @submit="onSubmit">
       <HeaderMenu/>
       <h3> Username</h3>
-      <input class="text" v-model="username" name="username"/>
+      <input class="text" v-model="username"/>
       <h3> Password</h3>
-      <input class="text" v-model="password" name="password"/>
+      <input class="text" v-model="password"/>
       <div class="flex">
         <input type="submit" value="Log in" class="btn"/>
       </div>

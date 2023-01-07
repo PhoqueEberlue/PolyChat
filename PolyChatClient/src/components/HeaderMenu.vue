@@ -1,9 +1,21 @@
 <script setup>
 import Button from "./Button.vue";
+import Signout from "./Signout.vue";
 import { MDBNavbar, MDBNavbarNav, MDBDropdownItem,
 	MDBDropdown, MDBCollapse, MDBNavbarToggler, 
 	MDBNavbarItem, MDBDropdownMenu, MDBDropdownToggle,
 	MDBNavbarBrand} from "mdb-vue-ui-kit";
+</script>
+
+<script>
+	export default {
+		data: () => ({
+			shouldLogin: false
+		}),
+		beforeMount(){
+			this.shouldLogin = !$cookies.isKey("username");
+		}
+	}
 </script>
 
 <template>
@@ -23,7 +35,8 @@ import { MDBNavbar, MDBNavbarNav, MDBDropdownItem,
 				</MDBNavbarBrand>
 				<div class="void"> </div>
 				<MDBNavbarNav collapse="navbarNav">
-					<Button class="btn" name="Signup" url="/signup" />
+					<Button v-if="shouldLogin" class="btn" name="Signup" url="/signup" />
+					<Signout v-else class="btn"/>
 				</MDBNavbarNav>
 			</MDBNavbar>
 		</div>
@@ -40,7 +53,7 @@ ul {
 .btn {
 	margin-right: 0px;
 	margin-left: 0px;
-	margin-top: 5px
+	margin-top: 5px;
 
 }
 

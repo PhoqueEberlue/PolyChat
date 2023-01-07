@@ -1,3 +1,7 @@
+<script setup>
+
+import HeaderMenu from "../components/HeaderMenu.vue";
+</script>
 <script>
 import io from 'socket.io-client';
 
@@ -55,13 +59,15 @@ export default {
 </script>
 
 <template>
+<div>
+	<HeaderMenu />
   <div id="messages">
-
   </div>
 	<div>
     <input id="inputMessage">
     <button id="sendMessage" v-on:click="sendMessage">Envoyer</button>
 	</div>
+</div>
 </template>
 
 <style scoped>
