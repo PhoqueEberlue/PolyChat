@@ -1,5 +1,6 @@
 <script setup>
 import HeaderMenu from "../components/HeaderMenu.vue";
+import ChannelSelector from "../components/ChannelSelector.vue";
 </script>
 <script>
 import io from 'socket.io-client';
@@ -22,13 +23,26 @@ export default {
 		id: Number
 	},
 	mounted(){
-	 //has to be after socket has been created, after we got username and chan id 
-	 //and mounted is after created in lifecycle hooks
-	 console.log("username: ", this.user, "| id: ", this.channel_id)
-   this.socket.on("return-connect-channel", (connected_users_nicknames) => {
-      // Gets the list of the connected users
+		//has to be after socket has been created, after we got username and chan id 
+		//and mounted is after created in lifecycle hooks
+		console.log("username: ", this.user, "| id: ", this.channel_id)
+		this.socket.on("return-connect-channel", (connected_users_nicknames, list_msg) => {
+			// Gets the list of the connected users
       console.log(connected_users_nicknames);
+			for(let msg of list_msg){
+				this.messages.push({author: (msg.nickname_user == this.user ? "You" : msg.nickname_user), 
+													 content: msg.content_message, 
+													 time: msg.time_message});
+			}
+			this.messages.reverse();
     });
+
+		this.socket.on("disconnect", (reason) => {
+			this.messages.push({author: "System", 
+													content:`Connection timout ! reason : ${reason}`,
+													time: new Date().toISOString().slice(0, 19).replace('T', ' ')});
+			this.socket.close();
+		});
 
 
     this.socket.on("greetings", (msg) => {
@@ -55,20 +69,15 @@ export default {
     else 
 			this.channel_id = this.id;
 
-    // HARD CODED USER FOR TEST PURPOSES
-    /* ------------- SETUP LISTENERS ------------- */
-
-
-		this.user = $cookies.get("username");
-    // Listen the return of the connect channel call
- 
+		this.user = $cookies.get("username");//get cookies before app is mounted (cuz sockets)
   },
   methods: {
     sendMessage(e) {
 			//this.messages.push(this.inputMessage);
 			e.preventDefault();
 			if(this.inputMessage === "") return;
-			this.messages.push({author: "You", content: this.inputMessage});
+			this.messages.push({author: "You", content: this.inputMessage, 
+													time: new Date().toISOString().slice(0, 19).replace('T', ' ')});
       this.socket.emit("send-message-channel", this.user, this.channel_id, this.inputMessage); // When pressing enter / send message button
 			this.inputMessage = "";
     },
@@ -78,9 +87,12 @@ export default {
 
 <template>
 <div>
-	<HeaderMenu />
+	<ChannelSelector />
   <div v-for="(msg, index) in messages" :key=index class="messages" id="messages">
-		<div> [{{ msg.author }}]: {{ msg.content }} </div>
+		<div> 
+			[{{ msg.author }}]: {{ msg.content }} 
+			<span> time : {{msg.time }} </span>
+		</div>
   </div>
 	<form @submit="sendMessage">
     <input class="text" v-model="inputMessage">
@@ -90,5 +102,18 @@ export default {
 </template>
 
 <style scoped>
+form{
+	display:flex;
+	justify-content: center;
+	align-content: center;
+}
+span {
+	color: var(--color-background);
+  transition: color 0.2s linear;
+}
+div:hover > span {
+	color: var(--color-background-mute);
+  transition: color 0.2s linear;
+}
 
 </style>

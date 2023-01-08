@@ -3,12 +3,13 @@ import Button from "../components/Button.vue"
 </script>
 
 <template>
-  <div class="listChannel">
-		<h2> List of channels :</h2>
-		<div v-for="(channel, index) in list_channel" :key=index class="channel">
-			<Button :url='"/channel/" + channel.id_channel'  :name="channel.name_channel " />
-		</div>
-  </div>
+<div class="listChannel">
+	<h2> List of channels :</h2>
+	<div v-for="(channel, index) in list_channel" :key=index class="channel">
+		<Button :url='"/channel/" + channel.id_channel' :name="channel.name_channel" />
+	</div>
+	<Button url="/createChannel" name="Create a new channel" />
+</div>
 </template>
 
 <script>
@@ -53,6 +54,10 @@ export default {
 
 <style scoped>
 h2 {
+	display: flex;
+	justify-content: center;
+}
+a {
 	display: flex;
 	justify-content: center;
 }

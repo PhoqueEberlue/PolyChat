@@ -83,7 +83,7 @@ class DB_Controller {
 
         // Select user and check if password matches
         let res = await this.conn.query("SELECT * FROM USER WHERE nickname_user = ? and password_user = ?", [nickname_user, encrypted_password]);
-        return res[0] !== undefined;
+        return typeof res != undefined;
     }
 
     async createChannel(channel_name, nickname_user) {
@@ -95,6 +95,8 @@ class DB_Controller {
 
         // Adds the creator of the channel in the channel and set his admin privileges.
         await this.addUserInChannel(parseInt(res['insertId']), nickname_user, true)
+
+        return res != undefined;
     }
 
     async addUserInChannel(id_channel, nickname_user, is_admin) {
@@ -102,7 +104,8 @@ class DB_Controller {
         Adds a user in a Channel
          */
         await this.conn.query('INSERT INTO IS_IN_CHANNEL(nickname_user, id_channel, is_admin) VALUES(?, ?, ?)',
-            [nickname_user, id_channel, is_admin])
+            [nickname_user, id_channel, is_admin]);
+
     }
 
     async removeUserFromChannel(id_channel, nickname_user_to_delete, nickname_user_admin) {
@@ -153,6 +156,12 @@ class DB_Controller {
          */
         return await this.conn.query("SELECT id_channel, name_channel FROM CHANNEL", []);
     }
+
+		async getLastNMessagesOfChannel(n, channel_id){
+			let res = await this.conn.query("SELECT nickname_user, content_message, time_message \
+				FROM MESSAGE WHERE id_channel = ? ORDER BY id_message DESC LIMIT ?", [channel_id, n]);
+			return res;
+		}
 
 }
 

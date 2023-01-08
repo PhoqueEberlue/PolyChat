@@ -57,8 +57,8 @@ export default {
 <template>
   <div class="wrapper">
 
-		<HeaderMenu/>
     <form @submit="onSubmit">
+      <HeaderMenu/>
       <h3> Username</h3>
       <input class="text" v-model="username"/>
       <h3> Password</h3>

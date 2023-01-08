@@ -31,6 +31,18 @@ app.post('/login', (req, res) => {
 	});
 });
 
+app.post('/createChannel', (req, res) => {
+	//console.log(res);
+	let channelName = req.body.channel_name;
+	let username = req.body.username;
+
+	controller.createChannel(channelName, username).then((check) => {
+		console.log(check);
+		res.send(JSON.stringify({created: check}) + "\n");
+	});
+});
+
+
 app.listen(3000);
 
 // SOCKETS
@@ -42,7 +54,6 @@ const io = new socketio.Server(4500, {
 	cors: {
 		// Literally lying about the origin to avoid CORS errors lmao (change for the same port as the client)
 		origin: "http://localhost:5173",
-
 		credentials: true
 	}});
 
@@ -92,14 +103,16 @@ io.on("connection", (socket) => {
 		console.log(arg);
 	})
 
+
 	// Listen channel requests
 	socket.on("get-channel", async (nickname_user) => {
 		const res = await controller.getChannelsOfUser(nickname_user)
 		socket.emit("return-get-channel", res);
 	});
 
+
 	// Listen channel connections for user to connect to
-	socket.on("connect-channel", (id_channel, nickname_user) => {
+	socket.on("connect-channel", async (id_channel, nickname_user) => {
 		console.log(`user ${nickname_user} connected to channel ${id_channel}`);
 
 		let connected_users_nicknames = [];
@@ -120,9 +133,13 @@ io.on("connection", (socket) => {
 			connected_users_nicknames.push(user["nickname_user"]);
 		}
 
-		// Sends back the user the list of connected users
-		socket.emit("return-connect-channel", connected_users_nicknames); // Sends the list of connected users
+		let last50messages = await controller.getLastNMessagesOfChannel(20, id_channel);
+		console.log(last50messages);
+		// Sends back the user the list of connected user
+		socket.emit("return-connect-channel", connected_users_nicknames, last50messages); 
+		// Sends the list of connected users and last 50 messages
 	});
+
 
 	// Gets the message sent by a user in a channel
 	socket.on("send-message-channel", async (nickname_user, id_channel, content) => {
