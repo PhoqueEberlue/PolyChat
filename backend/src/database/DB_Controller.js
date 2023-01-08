@@ -103,8 +103,9 @@ class DB_Controller {
         /*
         Adds a user in a Channel
          */
-        await this.conn.query('INSERT INTO IS_IN_CHANNEL(nickname_user, id_channel, is_admin) VALUES(?, ?, ?)',
+        const res = await this.conn.query('INSERT IGNORE INTO IS_IN_CHANNEL(nickname_user, id_channel, is_admin) VALUES(?, ?, ?)',
             [nickname_user, id_channel, is_admin]);
+        return res != undefined;
 
     }
 
@@ -135,6 +136,21 @@ class DB_Controller {
         return res[0]['is_admin']
     }
 
+		async setUserAdmin(nickname, id){
+				//set user as admin of this channel
+				if(this.isUserAdminOfChannel(nickname, id)){
+					return true;
+				}
+				else{
+        const res = await this.conn.query("UPDATE IS_IN_CHANNEL SET is_admin = true WHERE nickname_user = ? and id_channel = ?",
+            [nickname_user, id_channel])
+
+        return res[0]['is_admin']
+					
+				}
+
+		}
+
     async createMessage(id_channel, nickname_sender, content) {
         /*
         Stores a new message in the database
@@ -150,12 +166,24 @@ class DB_Controller {
         return await this.conn.query("SELECT id_channel, name_channel FROM IS_IN_CHANNEL NATURAL JOIN CHANNEL WHERE nickname_user = ?", [nickname_user]);
     }
 
+    async getUserOfChannel(channelId) {
+        /*
+        Returns every channel the user is in
+         */
+        return await this.conn.query("SELECT nickname_user FROM IS_IN_CHANNEL NATURAL JOIN CHANNEL WHERE id_channel = ?", [channelId]);
+    }
+
     async getAllChannels() {
         /*
         Returns all channels of the app
          */
         return await this.conn.query("SELECT id_channel, name_channel FROM CHANNEL", []);
     }
+
+		async getAllUsers(){
+				//return all users of the app
+        return await this.conn.query("SELECT nickname_user FROM USER", []);
+		}
 
 		async getLastNMessagesOfChannel(n, channel_id){
 			let res = await this.conn.query("SELECT nickname_user, content_message, time_message \

@@ -9,6 +9,7 @@ import Home from "@/pages/Home.vue";
 import Channel from "@/pages/Channel.vue";
 import CreateChannel from "@/pages/CreateChannel.vue";
 import Channels from "@/pages/Channels.vue";
+import AddUser from "@/pages/AddUser.vue";
 
 import "./assets/main.css";
 
@@ -19,6 +20,7 @@ const routes = [
 	{ name: "channels", path: "/channels", component: Channels},
 	{ name: "createChannel", path: "/createChannel", component: CreateChannel},
 	{ name: "channel", path: "/channel/:id", component: Channel, props: true},
+	{ name: "addUser", path: "/addUser/:id", component: AddUser, props: true},
 	{ name: "NotFound", path: "/:pathMatch(.*)*", component: NotFound },
 ];
 

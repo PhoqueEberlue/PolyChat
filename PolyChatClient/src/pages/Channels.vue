@@ -7,6 +7,7 @@ import Button from "../components/Button.vue"
 	<h2> List of channels :</h2>
 	<div v-for="(channel, index) in list_channel" :key=index class="channel">
 		<Button :url='"/channel/" + channel.id_channel' :name="channel.name_channel" />
+		<Button :url='"/addUser/" + channel.id_channel' name="add user" />
 	</div>
 	<Button url="/createChannel" name="Create a new channel" />
 </div>
@@ -62,13 +63,15 @@ a {
 	justify-content: center;
 }
 .listChannel {
-	display: center;
+	display:center;
 	justify-content: center;
-
+  max-width: 50vw;
 }
 
 .channel {
+	display: grid;
+	grid-template-columns: 3fr 1fr;
 	justify-content: center;
-	margin: 10px;
+	margin-top: 10px;
 }
 </style>

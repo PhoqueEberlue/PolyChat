@@ -1,5 +1,6 @@
 <script setup>
-import Button from "../components/Button.vue"
+import Button from "../components/Button.vue";
+import AddUser from "./AddUser.vue";
 </script>
 
 <template>

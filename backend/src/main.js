@@ -42,6 +42,41 @@ app.post('/createChannel', (req, res) => {
 	});
 });
 
+app.post('/addUser', (req, res) => {
+	//console.log(res);
+	let channelId = req.body.channel_id;
+	let username = req.body.username;
+	let toSend = {};
+
+	if(controller.isUserAdminOfChannel(username, channelId)){
+		toSend.isAdmin = true;
+		controller.addUserInChannel(channelId, username, true).then((check) => {
+			toSend.added = check;
+			controller.getAllUsers().then((users) => {
+				toSend.users = users;
+				res.send(JSON.stringify(toSend) + "\n");
+			});
+		});
+
+	}
+	else 
+		res.send(JSON.stringify({isAdmin: false}) + "\n");
+
+});
+
+app.post('/addUserToChannel', (req, res) => {
+	//console.log(res);
+	let channelId = req.body.channel_id;
+	let username = req.body.username;
+
+	controller.addUserInChannel(channelId, username, false).then((check) => {
+		res.send(JSON.stringify({success: check}) + "\n");
+		console.log("added ", username, " to ", channelId)
+		return;
+	});
+});
+
+
 
 app.listen(3000);
 
@@ -63,6 +98,8 @@ let list_channels;
 
 function containsNickname(nickname, list) {
 	var x;
+	if(!(list != null && typeof list[Symbol.iterator] === 'function'))
+		return false;//check if list is iterable
 	for (x of list) {
 		if (x["nickname_user"] === nickname) {
 			return true;
@@ -119,7 +156,7 @@ io.on("connection", (socket) => {
 		// Update the list of connected users
 		let channel = getChanel(id_channel);
 		if(channel == -1){
-			console.log("ERROR no channel. List of channels : ");
+			console.log("ERROR no channel.");
 		}
 
 		// Adds the new user to the connected user list
