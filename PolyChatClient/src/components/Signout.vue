@@ -11,7 +11,7 @@
 
 <template>
 	<a v-on:click="signout">
-		signout
+		Sign-out
 	</a>
 </template>
 

@@ -16,10 +16,10 @@ const routes = [
 	{ name: "root", path: "/", component: Home },
 	{ name: "login", path: "/login", component: Login },
 	{ name: "signup", path: "/signup", component: Signup },
-	{ name: "channels", path: "/channels", component: Channels },
-	{ name: "channel", path: "/channel", component: Channel,
+	{ name: "channels", path: "/channels", component: Channels},
+	{ name: "channel", path: "/channel/:id", component: Channel, props: true,
 		children:[{
-			path: "/channel/:id", component: Channel,
+			path: "", component: Channels,
 		}]
 	},
 	{ name: "NotFound", path: "/:pathMatch(.*)*", component: NotFound },

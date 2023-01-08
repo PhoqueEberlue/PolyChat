@@ -22,6 +22,8 @@ export default {
     async onSubmit(e) {
       e.preventDefault()
 
+			//remove the next 2 lines please
+
       const newInformation = {
         "username": this.username,
         "password": this.password
@@ -39,13 +41,13 @@ export default {
         body: JSON.stringify(newInformation)
       };
 
-      this.res = await (await (await fetch("http://localhost:3000/login", requestOptions)).json())["authentified"] == true ? true : false;
+      this.res = await (await (await fetch("http://localhost:3000/login", requestOptions)).json())["authentified"] ? true : false;
 
       this.notAuth = !this.res;
 
       if (this.res) {
         $cookies.set("username", this.username);
-        window.location.href = "/channel/";
+        window.location.href = "/channels";
       }
       console.log(this.res);
     }

@@ -27,7 +27,6 @@ app.post('/login', (req, res) => {
 	let password = req.body.password;
 
 	controller.checkCredentialsUser(username, password).then((check) => {
-		console.log("LOGIN: " + check)
 		res.send(JSON.stringify({authentified: check}) + "\n");
 	});
 });
@@ -50,6 +49,17 @@ const io = new socketio.Server(4500, {
 
 // Declare our list of current channels
 let list_channels;
+
+function containsNickname(nickname, list) {
+	var x;
+	for (x of list) {
+		if (x["nickname_user"] === nickname) {
+			return true;
+		}
+	}
+	return false;
+}
+
 (async () => {
 	// loads existing channels from the database
 	await controller.initDBConnection();
@@ -62,16 +72,17 @@ let list_channels;
 })();
 
 function getChanel(id_channel) {
-	for (let channel in list_channels) {
-		if (list_channels[channel]["id_channel"] === parseInt(id_channel)) {
-			return list_channels[channel];
-		}
+	for (let channel of list_channels){
+		if (channel["id_channel"] == parseInt(id_channel))
+			return channel;
 	}
+	return -1;
 }
 
 // IO SOCKETS
 io.on("connection", (socket) => {
-	console.log("New user connected!" + socket.toString());
+	//console.log("New user connected!" + socket.toString());
+	console.log("New user connected!");
 
 	// Greets our fabulous user
 	socket.emit("greetings", "Hello from the server!");
@@ -93,14 +104,20 @@ io.on("connection", (socket) => {
 
 		let connected_users_nicknames = [];
 		// Update the list of connected users
-		let channel = getChanel(id_channel)
+		let channel = getChanel(id_channel);
+		if(channel == -1){
+			console.log("ERROR no channel. List of channels : ");
+		}
 
 		// Adds the new user to the connected user list
-		channel["connected_users"].push({"nickname_user": nickname_user, "socket_obj": socket});
+		let obj = {"nickname_user": nickname_user, "socket_obj": socket};
+		//push only if not here
+		if(!containsNickname(nickname_user, channel["connected_users"]))
+			channel["connected_users"].push(obj);
 
 		// Gets the name of all connected users
-		for (let user in channel["connected_users"]) {
-			connected_users_nicknames.push(channel["connected_users"][user]["nickname_user"]);
+		for (let user of channel["connected_users"]) {
+			connected_users_nicknames.push(user["nickname_user"]);
 		}
 
 		// Sends back the user the list of connected users
@@ -116,10 +133,10 @@ io.on("connection", (socket) => {
 		await controller.createMessage(id_channel, nickname_user, content);
 
 		// Loop through each connected users socket of the current channel
-		for (let user in channel["connected_users"]) {
-			if (channel["connected_users"][user]["nickname_user"] !== nickname_user) {
+		for (let user of channel["connected_users"]) {
+			if (user["nickname_user"] !== nickname_user) {
 				// Send the message to the current user
-				channel["connected_users"][user]["socket_obj"].emit("receive-message-channel", nickname_user, id_channel, content);
+				user["socket_obj"].emit("receive-message-channel", nickname_user, id_channel, content);
 			}
 		}
 	});
