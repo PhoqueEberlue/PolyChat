@@ -1,4 +1,6 @@
 <script setup>
+//NOTE this is a vertical bar to show channels, and add some on the fly
+//TODO its not vertical ? i hate css
 import Button from "./Button.vue";
 import Signout from "./Signout.vue";
 import { MDBNavbar, MDBNavbarNav, MDBDropdownItem,
@@ -34,9 +36,9 @@ import { MDBNavbar, MDBNavbarNav, MDBDropdownItem,
 					PolyChat
 				</MDBNavbarBrand>
 				<div class="void"> </div>
-				<MDBNavbarNav collapse="navbarNav">
-					<Button v-if="shouldLogin" class="btn" name="Signup" url="/signup" />
-					<Signout v-else class="btn"/>
+				<MDBNavbarNav v-for="(channel, index) in list_channel" :key=index  collapse="navbarNav">
+
+					<Button :url='"/channel/" + channel.id_channel' :name="channel.name_channel" />
 				</MDBNavbarNav>
 			</MDBNavbar>
 		</div>
@@ -66,7 +68,8 @@ a {
 
 nav, .nav {
 	position: fixed;
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr;
 	top: 0;
 	left: 0;
 	width: 100vw;
