@@ -17,13 +17,8 @@ const routes = [
 	{ name: "login", path: "/login", component: Login },
 	{ name: "signup", path: "/signup", component: Signup },
 	{ name: "channels", path: "/channels", component: Channels},
-	{ name: "channel", path: "/channel/:id", component: Channel, props: true,
-		children:[{
-			path: "", component: Channels,
-		}]
-	},
+	{ name: "channel", path: "/channel/:id", component: Channel, props: true},
 	{ name: "NotFound", path: "/:pathMatch(.*)*", component: NotFound },
-	//{ path: '/signup', component: Signup },
 ];
 
 const router = createRouter({
@@ -35,6 +30,3 @@ const router = createRouter({
 const app = createApp(App);
 app.use(router).use(VueCookies, {expire: '1d'});
 app.mount("#app");
-
-// TODO: Implement a kind of 'connection' and pass the user's nickname to our components
-// At the moment the user is hard coded in Channel.vue for test purposes of the socket

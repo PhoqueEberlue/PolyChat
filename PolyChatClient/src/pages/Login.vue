@@ -11,7 +11,6 @@ defineProps({
 
 <script>
 export default {
-  username: 'AddInformation',
   data: () => ({
     username : '',
     password: '',
@@ -58,8 +57,8 @@ export default {
 <template>
   <div class="wrapper">
 
+		<HeaderMenu/>
     <form @submit="onSubmit">
-      <HeaderMenu/>
       <h3> Username</h3>
       <input class="text" v-model="username"/>
       <h3> Password</h3>
@@ -105,6 +104,5 @@ h3.notAuth {
   display: flex;
   justify-content: center;
 }
-
 
 </style>

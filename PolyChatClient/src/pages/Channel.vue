@@ -1,5 +1,4 @@
 <script setup>
-
 import HeaderMenu from "../components/HeaderMenu.vue";
 </script>
 <script>
@@ -8,13 +7,15 @@ import io from 'socket.io-client';
 
 export default {
   name: "channel",
-  data() {
+  data: () => {
     return {
       // Defining our socket
       socket: io("http://localhost:4500"),
       users: [],
 			user: "no",
       channel_id: 'tmp',
+			messages: [],
+			inputMessage: ""
     }
   },
 	props: {
@@ -38,10 +39,8 @@ export default {
 
     // Listen new messages sent by other users (including yourself, need to fix this later)
     this.socket.on("receive-message-channel", (nickname_user, id_channel, content) => {
-      let message_elem = document.createElement("div");
-      message_elem.innerHTML = `[${nickname_user}]: ${content}`;
-      document.getElementById("messages").appendChild(message_elem);
-			console.log("message from :", nickname_user);
+      console.log("message from :", nickname_user);
+			this.messages.push({author: nickname_user, content: content});
     });
 
     // Send a connect request
@@ -65,15 +64,14 @@ export default {
  
   },
   methods: {
-    sendMessage: function () {
-      let message = document.getElementById("inputMessage").value;
-      let message_elem = document.createElement("div");
-      message_elem.innerHTML = `[You] ${message}`;
-      document.getElementById("messages").appendChild(message_elem);
-
-      this.socket.emit("send-message-channel", this.user, this.channel_id, message); // When pressing enter / send message button
-      document.getElementById("inputMessage").value = "";
-    }
+    sendMessage(e) {
+			//this.messages.push(this.inputMessage);
+			e.preventDefault();
+			if(this.inputMessage === "") return;
+			this.messages.push({author: "You", content: this.inputMessage});
+      this.socket.emit("send-message-channel", this.user, this.channel_id, this.inputMessage); // When pressing enter / send message button
+			this.inputMessage = "";
+    },
   }
 }
 </script>
@@ -81,12 +79,13 @@ export default {
 <template>
 <div>
 	<HeaderMenu />
-  <div id="messages">
+  <div v-for="(msg, index) in messages" :key=index class="messages" id="messages">
+		<div> [{{ msg.author }}]: {{ msg.content }} </div>
   </div>
-	<div>
-    <input id="inputMessage">
-    <button id="sendMessage" v-on:click="sendMessage">Envoyer</button>
-	</div>
+	<form @submit="sendMessage">
+    <input class="text" v-model="inputMessage">
+		<input type="submit" value="Send message" class="btn"/>
+	</form>
 </div>
 </template>
 

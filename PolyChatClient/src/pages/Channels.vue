@@ -1,6 +1,13 @@
-<template>
-  <div id="listChannel">
+<script setup>
+import Button from "../components/Button.vue"
+</script>
 
+<template>
+  <div class="listChannel">
+		<h2> List of channels :</h2>
+		<div v-for="(channel, index) in list_channel" :key=index class="channel">
+			<Button :url='"/channel/" + channel.id_channel'  :name="channel.name_channel " />
+		</div>
   </div>
 </template>
 
@@ -14,7 +21,8 @@ export default {
       // Defining our socket
       socket: io("http://localhost:4500"),
       users: [],
-      user: "no"
+      user: "no",
+			list_channel: []
     }
   },
   created() {
@@ -31,13 +39,7 @@ export default {
     this.socket.on("return-get-channel", (list_channel) => {
       // Gets the list of the channels
 
-      for (let channel in list_channel) {
-        let channel_elem =  document.createElement("a");
-        channel_elem.innerHTML = `[${list_channel[channel]["id_channel"]}] ${list_channel[channel]["name_channel"]}`
-        channel_elem.href = `/channel/${list_channel[channel]["id_channel"]}`
-        document.getElementById("listChannel").appendChild(channel_elem)
-      }
-
+			this.list_channel = list_channel;
       console.log(list_channel);
     })
 
@@ -50,5 +52,18 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+	display: flex;
+	justify-content: center;
+}
+.listChannel {
+	display: center;
+	justify-content: center;
 
+}
+
+.channel {
+	justify-content: center;
+	margin: 10px;
+}
 </style>

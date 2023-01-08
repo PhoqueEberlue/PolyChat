@@ -70,8 +70,8 @@ nav, .nav {
 	top: 0;
 	left: 0;
 	width: 100vw;
-	border: .5vw solid #111;
-	background-color: #111;
+	border: .5vw solid var(--color-background-soft);
+	background-color: var(--color-background-soft);
 }
 
 .void {
