@@ -1,6 +1,5 @@
 <script setup>
 import HeaderMenu from "../components/HeaderMenu.vue";
-import ChannelSelector from "../components/ChannelSelector.vue";
 </script>
 <script>
 import io from 'socket.io-client';
@@ -87,7 +86,7 @@ export default {
 
 <template>
 <div>
-	<ChannelSelector />
+	<HeaderMenu />
   <div v-for="(msg, index) in messages" :key=index class="messages" id="messages">
 		<div> 
 			[{{ msg.author }}]: {{ msg.content }} 
