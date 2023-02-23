@@ -2,15 +2,14 @@
 import HeaderMenu from "../components/HeaderMenu.vue";
 </script>
 <script>
-import io from 'socket.io-client';
-
+import socket from "../services/socketio"
 
 export default {
   name: "channel",
   data: () => {
     return {
       // Defining our socket
-      socket: io("http://localhost:4500"),
+      socket: socket,
       users: [],
 			user: "no",
       channel_id: 'tmp',
@@ -22,16 +21,18 @@ export default {
 		id: Number
 	},
 	mounted(){
+		this.socket.setup();
+
 		//has to be after socket has been created, after we got username and chan id 
 		//and mounted is after created in lifecycle hooks
-		console.log("username: ", this.user, "| id: ", this.channel_id)
+		console.log("username: ", this.user, "| id: ", this.id)
 		this.socket.on("return-connect-channel", (connected_users_nicknames, list_msg) => {
 			// Gets the list of the connected users
       console.log(connected_users_nicknames);
 			for(let msg of list_msg){
-				this.messages.push({author: (msg.nickname_user == this.user ? "You" : msg.nickname_user), 
-													 content: msg.content_message, 
-													 time: msg.time_message});
+				this.messages.push({author: (msg.author == this.user ? "You" : msg.author), 
+													 content: msg.content, 
+													 time: msg.date});
 			}
 			this.messages.reverse();
     });
@@ -57,7 +58,7 @@ export default {
     });
 
     // Send a connect request
-    this.socket.emit("connect-channel", this.channel_id, this.user);
+    this.socket.emit("connect-channel", [this.channel_id, this.user]);
 
 	},
   created() {
@@ -77,7 +78,7 @@ export default {
 			if(this.inputMessage === "") return;
 			this.messages.push({author: "You", content: this.inputMessage, 
 													time: new Date().toISOString().slice(0, 19).replace('T', ' ')});
-      this.socket.emit("send-message-channel", this.user, this.channel_id, this.inputMessage); // When pressing enter / send message button
+      this.socket.emit("send-message-channel", [this.user, this.channel_id, this.inputMessage]); // When pressing enter / send message button
 			this.inputMessage = "";
     },
   }

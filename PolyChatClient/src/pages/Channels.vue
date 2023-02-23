@@ -1,13 +1,20 @@
 <script setup>
 import Button from "../components/Button.vue"
+import socket from "../services/socketio";
+
 </script>
 
 <template>
 <div class="listChannel">
 	<h2> List of channels :</h2>
-	<div v-for="(channel, index) in list_channel" :key=index class="channel">
-		<Button :url='"/channel/" + channel.id_channel' :name="channel.name_channel" />
-		<Button :url='"/addUser/" + channel.id_channel' name="add user" />
+	<div v-if="list_channel.length > 0">
+		<div v-for="(channel, index) in list_channel" :key=index class="channel">
+			<Button :url='"/channel/" + channel._id' :name="channel.name" />
+			<Button :url='"/addUser/" + channel._id' name="add user" />
+		</div>
+	</div>
+	<div v-else>
+		its empty in here !
 	</div>
 	<Button url="/createChannel" name="Create a new channel" />
 </div>
@@ -21,13 +28,14 @@ export default {
   data() {
     return {
       // Defining our socket
-      socket: io("http://localhost:4500"),
+      socket: socket,
       users: [],
       user: "no",
 			list_channel: []
     }
   },
   created() {
+		this.socket.setup();
     this.user = $cookies.get("username");
 
     // Listen greetings of the ~ lovely ~ server UwU
@@ -42,8 +50,9 @@ export default {
       // Gets the list of the channels
 
 			this.list_channel = list_channel;
-      console.log(list_channel);
-    })
+
+      //console.log(list_channel);
+    });
 
     /* ------------- Executing on page load requests ------------- */
 

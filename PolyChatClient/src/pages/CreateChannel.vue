@@ -1,6 +1,7 @@
 <script setup>
 import Button from "../components/Button.vue";
 import AddUser from "./AddUser.vue";
+import {middleware_port, middleware_ip} from "../../config";
 </script>
 
 <template>
@@ -65,10 +66,10 @@ export default {
         body: JSON.stringify(newInformation)
       };
 
-      this.res = await (await (await fetch("http://localhost:3000/createChannel", requestOptions)).json())["created"] ? true : false;
+      this.res = await (await (await fetch(`http://${middleware_ip}:${middleware_port}/createChannel`, requestOptions)).json())["created"] ? true : false;
 
       if (this.res) {
-        window.location.href = "/channels";
+        this.$router.push("/channels");
       }
     }
 	}

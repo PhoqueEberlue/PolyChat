@@ -2,22 +2,30 @@ let express = require('express');
 let cors = require('cors');
 let bodyParser = require('body-parser');
 
-const db_controller = require('./database/DB_Controller');
+import mongoose from 'mongoose';
+import {DB_Controller, Channels} from './database/DB_Controller';
 
-let controller = new db_controller.DB_Controller();
+let controller = new DB_Controller();
 
 let app = express();
 
+const corsOpt = {
+	"origin": "*"
+}
+
 app.use(bodyParser.json({type: ['application/json', 'text/plain']}));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors(corsOpt));
 
 
 app.post('/signup', (req, res) => { // Specifies which URL to listen for
   // req.body -- contains form data
 	let username = req.body.username;
 	let password = req.body.password;
-	console.log(username + password);
+
+	controller.createUser(username, password).then((check) => {
+		res.send(JSON.stringify({authentified: check}) + "\n");
+	});
 });
 
 app.post('/login', (req, res) => {
@@ -46,7 +54,7 @@ app.post('/addUser', (req, res) => {
 	//console.log(res);
 	let channelId = req.body.channel_id;
 	let username = req.body.username;
-	let toSend = {};
+	let toSend = {isAdmin: false, added: false, users:[]};
 
 	if(controller.isUserAdminOfChannel(username, channelId)){
 		toSend.isAdmin = true;
@@ -64,7 +72,7 @@ app.post('/addUser', (req, res) => {
 
 });
 
-app.post('/addUserToChannel', (req, res) => {
+app.post('/addUserToChannel', (req: any, res: any) => {
 	//console.log(res);
 	let channelId = req.body.channel_id;
 	let username = req.body.username;
@@ -78,26 +86,27 @@ app.post('/addUserToChannel', (req, res) => {
 
 
 
-app.listen(3000);
+app.listen(80);
+console.log("listening on 80");
 
 // SOCKETS
 //import { Server } from "socket.io"; // Lmao' can't import outside modules?? wtf js
-const socketio = require("socket.io"); // guess I'll just require xDDD
+import * as socketio from "socket.io";
 
 // Creating the socket server
 const io = new socketio.Server(4500, {
 	cors: {
 		// Literally lying about the origin to avoid CORS errors lmao (change for the same port as the client)
-		origin: "http://localhost:5173",
 		credentials: true
 	}});
 
 
+
 // Declare our list of current channels
-let list_channels;
+let list_channels = [];
 
 function containsNickname(nickname, list) {
-	var x;
+	let x: Object;
 	if(!(list != null && typeof list[Symbol.iterator] === 'function'))
 		return false;//check if list is iterable
 	for (x of list) {
@@ -115,17 +124,19 @@ function containsNickname(nickname, list) {
 
 	// Adds a list to store connected users, this list won't be stored in the database
 	for (let channel in list_channels) {
-		list_channels[channel]["connected_users"] = []
+		list_channels[channel]["connected_users"] = []//this shouldnt be done here
+		//TODO store it if at least one user on it
 	}
 })();
 
 function getChanel(id_channel) {
 	for (let channel of list_channels){
-		if (channel["id_channel"] == parseInt(id_channel))
+		if (channel["_id"].toString() == id_channel)
 			return channel;
 	}
 	return -1;
 }
+
 
 // IO SOCKETS
 io.on("connection", (socket) => {
@@ -143,24 +154,27 @@ io.on("connection", (socket) => {
 
 	// Listen channel requests
 	socket.on("get-channel", async (nickname_user) => {
-		const res = await controller.getChannelsOfUser(nickname_user)
+		console.log("[GET CHANNEL] ", nickname_user);
+		let res: Array<typeof Channels> = await controller.getChannelsOfUser(nickname_user);
+		//let resString: Array<String> = await controller.getChannelByIds(res);
 		socket.emit("return-get-channel", res);
 	});
 
 
 	// Listen channel connections for user to connect to
-	socket.on("connect-channel", async (id_channel, nickname_user) => {
+	socket.on("connect-channel", async (id_channel:string, nickname_user: string) => {
 		console.log(`user ${nickname_user} connected to channel ${id_channel}`);
 
 		let connected_users_nicknames = [];
 		// Update the list of connected users
 		let channel = getChanel(id_channel);
+		//channel["connected_users"] = []
 		if(channel == -1){
 			console.log("ERROR no channel.");
 		}
 
 		// Adds the new user to the connected user list
-		let obj = {"nickname_user": nickname_user, "socket_obj": socket};
+		let obj = {"nickname_user": nickname_user, "socket_obj": socket};//TODO dictionnary
 		//push only if not here
 		if(!containsNickname(nickname_user, channel["connected_users"]))
 			channel["connected_users"].push(obj);

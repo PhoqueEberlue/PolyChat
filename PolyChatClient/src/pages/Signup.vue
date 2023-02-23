@@ -1,5 +1,6 @@
 <script setup>
 import HeaderMenu from "../components/HeaderMenu.vue";
+import {middleware_port, middleware_ip} from "../../config";
 defineProps({
 	name: {
 		type: String,
@@ -38,9 +39,15 @@ defineProps({
 					body: JSON.stringify(newInformation)
 				};
 
-				this.res = await (await (await fetch("http://localhost:3000/signup", requestOptions)).json())["authentified"] == true ? true : false;
+				this.res = await (await (await fetch(`http://${middleware_ip}:${middleware_port}/signup`,
+						requestOptions)).json())["authentified"] == true ? true : false;//??
 				this.notAuth = !this.res;
 				console.log(this.res);
+
+				if(this.res){
+					$cookies.set("username", this.username);
+					this.$router.push("/channels");
+				}
 				
 				this.username = ' ';
 				this.password = ' ';
@@ -65,10 +72,10 @@ defineProps({
 
 		<div class="flex" v-if="res">
 			<h3 class="auth"> Authentified ! </h3>
-			<router-link to="/channel"> click here to get redirected </router-link>
+			<router-link to="/channels"> click here to get redirected </router-link>
 		</div>
 		<div class="flex" v-else-if="notAuth">
-			<h3 class="notAuth"> Unvalid credentials.</h3>
+			<h3 class="notAuth"> Error ? wtf </h3>
 			<router-link to="/signup"> Please signup if necessaray. </router-link>
 		</div>
 

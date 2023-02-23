@@ -1,6 +1,7 @@
 <script setup>
 import HeaderMenu from "../components/HeaderMenu.vue";
 import Button from "../components/Button.vue";
+import {middleware_port, middleware_ip} from "../../config";
 </script>
 
 <script>
@@ -22,13 +23,11 @@ export default {
   async created() {
 		if(isNaN(parseInt(this.id))){
 			this.channel_id = 1;
-			console.log(this.id);
 		}
     else 
 			this.channel_id = this.id;
 
 		this.user = $cookies.get("username");//get cookies before app is mounted (cuz sockets)
-		console.log("user : ", this.user);
 		const newInformation = {
 			channel_id: this.channel_id,
 			username: this.user
@@ -47,12 +46,10 @@ export default {
 						body: JSON.stringify(newInformation)
 					};
 
-		const res = await (await (await fetch("http://localhost:3000/addUser", requestOptions)).json());
+		const res = await (await (await fetch(`http://${middleware_ip}:${middleware_port}/addUser`, requestOptions)).json());
 		this.isAdmin = res["isAdmin"];
 		for(let k of res["users"])
-			this.users.push(k["nickname_user"]);
-
-		console.log(res);
+			this.users.push(k["username"]);
 
   },
   methods: {
@@ -77,8 +74,7 @@ export default {
 						};
 
 
-			const success = await (await (await fetch("http://localhost:3000/addUserToChannel", requestOptions)).json())["success"];
-			console.log(success)
+			const success = await (await (await fetch(`http://${middleware_ip}:${middleware_port}/addUserToChannel`, requestOptions)).json())["success"];
 			if(success)
         window.location.href = "/channel/" + this.id;
 		},
