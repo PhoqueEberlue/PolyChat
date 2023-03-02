@@ -7,6 +7,8 @@ import {readFile} from "fs/promises";
 import { sha256 } from "js-sha256";
 import { exec } from "child_process";
 
+import * as chalk from "chalk";
+
 
 class DB_Controller {
 	path:String;
@@ -34,11 +36,10 @@ class DB_Controller {
 				*/
 		await this.parseCredentials(this.path);
 
-		console.log("connecting to: ", this.credentials["con_string"])
 		mongoose.connect(this.credentials["con_string"] + "/" + this.credentials["database"]);
 
 		mongoose.connection.on('connected', async (ref) => {
-			console.log('Connected to mongo server.');
+			console.log(chalk.green("[MONGO CONNECT]"), 'Connected to mongo server.');
 		});
 
 		mongoose.connection.on("error", (err) => {
@@ -82,7 +83,7 @@ class DB_Controller {
 
 		// Select user and check if password matches
 		let res = await Users.findOne({username: nickname_user, password: password_user});
-		return res !== null;
+		return res == null ? null : res.id;
 	}
 
 	async createChannel(channel_name:String, nickname_user: String) {
@@ -93,7 +94,8 @@ class DB_Controller {
 				*/
 		const user = await Users.findOne({username: nickname_user});
 		let channels = user.channels;
-		const res = await Channels.create({name: channel_name, admins: [user], members: [user]});
+		const res = await Channels.create({name: channel_name, 
+																			admins: [user], members: [user]});
 		user.channels.push(res._id);
 		await user.save();
 		;
@@ -125,10 +127,13 @@ class DB_Controller {
 		return true;
 	}
 
-	async removeUserFromChannel(id_channel: String, nickname_user_to_delete: String, nickname_user_admin:String) {
+	async removeUserFromChannel(id_channel: String, 
+															nickname_user_to_delete: String, 
+															nickname_user_admin:String) {
 		/*
 				Removes a user from a Channel.
-				Returns false if the user that requested the deletion was not admin of the channel, true otherwise.
+				Returns false if the user that requested the deletion 
+				was not admin of the channel, true otherwise.
 				*/
 		let is_admin = await this.isUserAdminOfChannel(nickname_user_admin, id_channel);
 
@@ -194,12 +199,31 @@ class DB_Controller {
 		return (await Users.findOne({username: nickname_user})).channels;
 	}
 
+	async getChannelsIdsOfUserById(user_id: String) {
+		/*
+				Returns every channel the user is in
+				*/
+		return (await Users.findById(user_id)).channels;
+	}
+	
 	async getChannelsOfUser(nickname_user: String) {
 		/*
 				Returns every channel the user is in
 				*/
 		let channels: Array<typeof Channels> = [];
 		for(let id of await this.getChannelsIdsOfUser(nickname_user)){
+			channels.push(await Channels.findById(id));
+		}
+		return channels;
+
+	}
+
+	async getChannelsOfUserById(user_id: String) {
+		/*
+				Returns every channel the user is in
+				*/
+		let channels: Array<typeof Channels> = [];
+		for(let id of await this.getChannelsIdsOfUserById(user_id)){
 			channels.push(await Channels.findById(id));
 		}
 		return channels;
@@ -217,14 +241,13 @@ class DB_Controller {
 		/*
 				Returns all channels of the app
 				*/
-		let res = await Channels.find();
-		return res;
+		return await Channels.find();
 	}
 
 	async getAllUsers(){
 		//return all users of the app
 
-		return Users.find();
+		return await Users.find();
 	}
 
 	async getLastNMessagesOfChannel(n: number, channel_id: String){

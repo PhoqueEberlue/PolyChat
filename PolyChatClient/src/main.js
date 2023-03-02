@@ -1,6 +1,6 @@
-import { createApp } from 'vue';
+import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
-import { VueCookies } from 'vue-cookies'
+import { VueCookies } from "vue-cookies";
 import App from "@/App.vue";
 import Login from "@/pages/Login.vue";
 import Signup from "@/pages/Signup.vue";
@@ -17,10 +17,10 @@ const routes = [
 	{ name: "root", path: "/", component: Home },
 	{ name: "login", path: "/login", component: Login },
 	{ name: "signup", path: "/signup", component: Signup },
-	{ name: "channels", path: "/channels", component: Channels},
-	{ name: "createChannel", path: "/createChannel", component: CreateChannel},
-	{ name: "channel", path: "/channel/:id", component: Channel, props: true},
-	{ name: "addUser", path: "/addUser/:id", component: AddUser, props: true},
+	{ name: "channels", path: "/channels", component: Channels },
+	{ name: "createChannel", path: "/createChannel", component: CreateChannel },
+	{ name: "channel", path: "/channel/:id", component: Channel, props: true },
+	{ name: "addUser", path: "/addUser/:id", component: AddUser, props: true },
 	{ name: "NotFound", path: "/:pathMatch(.*)*", component: NotFound },
 ];
 
@@ -31,5 +31,5 @@ const router = createRouter({
 });
 
 const app = createApp(App);
-app.use(router).use(VueCookies, {expire: '1d'});
+app.use(router).use(VueCookies, { expire: "1d" });
 app.mount("#app");

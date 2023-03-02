@@ -1,6 +1,6 @@
 <script setup>
 import HeaderMenu from "../components/HeaderMenu.vue";
-import {middleware_port, middleware_ip} from "../../config";
+import { middleware_port, middleware_ip } from "../../config";
 defineProps({
 	name: {
 		type: String,
@@ -10,60 +10,66 @@ defineProps({
 </script>
 
 <script>
-	export default {
-		username : 'AddInformation',
-		data: () => ({
-				username : '',
-				password: '',
-				res: null,
-				notAuth: null
-		}),
-		methods : {
-			async onSubmit(e){
-				e.preventDefault()
+export default {
+	username: "AddInformation",
+	data: () => ({
+		username: "",
+		password: "",
+		res: null,
+		notAuth: null,
+	}),
+	methods: {
+		async onSubmit(e) {
+			e.preventDefault();
 
-				const newInformation = {
-					"username" : this.username,
-					"password" : this.password
-				}
+			const newInformation = {
+				username: this.username,
+				password: this.password,
+			};
 
-				const requestOptions = {
-					method: "POST",
-			    headers: {
-			        "Content-Type": "application/json",
-							"Access-Control-Allow-Origin": "*",
-							"Access-Control-Allow-Methods": "*",
-							"Access-Control-Allow-Headers": "Content-Type, Authorization",
-							"Access-Control-Allow-Credentials": "true"
-			    },
-					body: JSON.stringify(newInformation)
-				};
+			const requestOptions = {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"Access-Control-Allow-Origin": "*",
+					"Access-Control-Allow-Methods": "*",
+					"Access-Control-Allow-Headers": "Content-Type, Authorization",
+					"Access-Control-Allow-Credentials": "true",
+				},
+				body: JSON.stringify(newInformation),
+			};
 
-				this.res = await (await (await fetch(`http://${middleware_ip}:${middleware_port}/signup`,
-						requestOptions)).json())["authentified"] == true ? true : false;//??
-				this.notAuth = !this.res;
-				console.log(this.res);
+			let tmp =
+				await 
+					(await fetch(
+						`http://${middleware_ip}:${middleware_port}/signup`,
+						requestOptions))
+					.json();
 
-				if(this.res){
-					$cookies.set("username", this.username);
-					this.$router.push("/channels");
-				}
-				
-				this.username = ' ';
-				this.password = ' ';
+			this.res = tmp["authentified"];
+			this.notAuth = !this.res;
+			console.log(this.res);
+
+			if (this.res) {
+				$cookies.set("username", this.username);
+				$cookies.set("id", tmp.id);
+				this.$router.push("/channels");
 			}
-		}
-	}
+
+			this.username = " ";
+			this.password = " ";
+		},
+	},
+};
 </script>
 
 <template>
 	<div class="wrapper">
-
 		<form @submit="onSubmit">
 			<HeaderMenu />
-			<h3> Username</h3>
+			<h3>Username</h3>
 			<input class="text" v-model="username" name="username" />
-			<h3> Password</h3>
+			<h3>Password</h3>
 			<input class="text" v-model="password" name="password" />
 			<div class="flex">
 				<input type="submit" value="Log in" class="btn" />
@@ -71,14 +77,13 @@ defineProps({
 		</form>
 
 		<div class="flex" v-if="res">
-			<h3 class="auth"> Authentified ! </h3>
+			<h3 class="auth">Authentified !</h3>
 			<router-link to="/channels"> click here to get redirected </router-link>
 		</div>
 		<div class="flex" v-else-if="notAuth">
-			<h3 class="notAuth"> Error ? wtf </h3>
+			<h3 class="notAuth">Error ? wtf</h3>
 			<router-link to="/signup"> Please signup if necessaray. </router-link>
 		</div>
-
 	</div>
 </template>
 
@@ -95,17 +100,14 @@ input.text {
 }
 
 h3.auth {
-	color:green;
+	color: green;
 }
 h3.notAuth {
-	color:red;
+	color: red;
 }
 
-.flex{
+.flex {
 	display: flex;
 	justify-content: center;
 }
-
-
-
 </style>

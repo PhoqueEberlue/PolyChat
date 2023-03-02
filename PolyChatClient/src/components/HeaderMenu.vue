@@ -1,21 +1,29 @@
 <script setup>
 import Button from "./Button.vue";
 import Signout from "./Signout.vue";
-import { MDBNavbar, MDBNavbarNav, MDBDropdownItem,
-	MDBDropdown, MDBCollapse, MDBNavbarToggler, 
-	MDBNavbarItem, MDBDropdownMenu, MDBDropdownToggle,
-	MDBNavbarBrand} from "mdb-vue-ui-kit";
+import {
+	MDBNavbar,
+	MDBNavbarNav,
+	MDBDropdownItem,
+	MDBDropdown,
+	MDBCollapse,
+	MDBNavbarToggler,
+	MDBNavbarItem,
+	MDBDropdownMenu,
+	MDBDropdownToggle,
+	MDBNavbarBrand,
+} from "mdb-vue-ui-kit";
 </script>
 
 <script>
-	export default {
-		data: () => ({
-			shouldLogin: false
-		}),
-		beforeMount(){
-			this.shouldLogin = !$cookies.isKey("username");
-		}
-	}
+export default {
+	data: () => ({
+		shouldLogin: false,
+	}),
+	beforeMount() {
+		this.shouldLogin = !$cookies.isKey("username");
+	},
+};
 </script>
 
 <template>
@@ -30,13 +38,13 @@ import { MDBNavbar, MDBNavbarNav, MDBDropdownItem,
 						loading="lazy"
 						class="btn"
 					/>
-					<span style="padding-left:10px"/>
+					<span style="padding-left: 10px" />
 					PolyChat
 				</MDBNavbarBrand>
-				<div class="void"> </div>
+				<div class="void"></div>
 				<MDBNavbarNav collapse="navbarNav">
 					<Button v-if="shouldLogin" class="btn" name="Signup" url="/signup" />
-					<Signout v-else class="btn"/>
+					<Signout v-else class="btn" />
 				</MDBNavbarNav>
 			</MDBNavbar>
 		</div>
@@ -45,7 +53,7 @@ import { MDBNavbar, MDBNavbarNav, MDBDropdownItem,
 
 <style scoped>
 ul {
-	display:flex;
+	display: flex;
 	align-items: center;
 	justify-content: right;
 }
@@ -54,23 +62,23 @@ ul {
 	margin-right: 0px;
 	margin-left: 0px;
 	margin-top: 5px;
-
 }
 
 a {
-	display:flex;
+	display: flex;
 	font-size: 20px;
 	margin-top: 5px;
-	margin-left:10px;
+	margin-left: 10px;
 }
 
-nav, .nav {
+nav,
+.nav {
 	position: fixed;
 	display: flex;
 	top: 0;
 	left: 0;
 	width: 100vw;
-	border: .5vw solid var(--color-background-soft);
+	border: 0.5vw solid var(--color-background-soft);
 	background-color: var(--color-background-soft);
 }
 
@@ -79,30 +87,24 @@ nav, .nav {
 }
 
 @media (min-width: 1024px) {
-	.void{
+	.void {
 		display: block;
 	}
 }
-
 </style>
 
 <style>
-
 .container-fluid {
 	display: grid;
-	width:100vw;
+	width: 100vw;
 	grid-template-columns: 250px calc(100% - 250px - 1vw);
 }
 
 @media (min-width: 1024px) {
-
 	.container-fluid {
 		display: grid;
-		width:100vw;
+		width: 100vw;
 		grid-template-columns: 250px 70vw calc(30% - 250px - 1vw);
 	}
 }
-
-
-
 </style>
