@@ -30,13 +30,12 @@ import Button from "../components/Button.vue";
 </template>
 
 <style scoped>
-
 .logo {
 	display: block;
 	margin: 0 auto 2rem;
 }
 
-.wrapper{
+.wrapper {
 	place-items: center;
 }
 

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+		"module":"CommonJS",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "noImplicitAny": false,
+		"outDir": "./build",
+    "target": "ESNext"
+  },
+  "exclude": [
+    "node_modules",
+    ".npm"
+  ],
+	"include": [
+		"src/**/*"
+	]
+}
+
