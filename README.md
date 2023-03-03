@@ -4,43 +4,36 @@ School project implementing an instant messaging application with a backend data
 
 ## Introduction
 
-PolyChat uses NodeJS as a backend, VueJS for the frontend and MySQL.
+PolyChat uses NodeJS as a backend, VueJS for the frontend, MongoDB and Redis for the database.
 
 The project structure follows this:
 
 ```
 ├── backend
-│   ├── database -> MySQL source scripts
-│   └── main.js
-│   └── src
-│       └── database -> JS DB controller
-└── PolyChatClient
+│   ├── database         (SQL files from the past implementation)
+│   └── src              NodeJs
+│       └── database     Mongo / Redis controllers
+│           └── models   Mongo Models
+└── PolyChatClient       
+    ├── dist             Miscellaneous
+    │   └── assets
     ├── public
     └── src
-        ├── main.js 
-        ├── assets
-        ├── components -> Vue components
+        ├── assets       Images
+        ├── components   Vue components
         │   └── icons
-        └── pages -> Views
+        ├── pages        Vue pages
+        └── services     Socket.io
 ```
 
-In order to run the projet you must first setup a mysql database using the creation script in
-/backend/database/init_script.sql
-
-You may also want to create a new user with permissions to acces the database
-
-```sql
-CREATE USER username IDENTIFIED BY password
-GRANT ALL PRIVILEGES TO username;
-```
+In order to run the projet you must first run MongoDB and Redis daemons.
 
 Next add connection information in backend/database/credentials.json with this template:
 
 ```json
 {
-"host": "x.x.x.x",
-"user": "username",
-"password": "password"
+    "con_string": "mongodb:/",
+    "database": "127.0.0.1:28200"
 }
 ```
 
@@ -59,3 +52,28 @@ cd PolyChatClient/src
 npm run install
 npm run dev
 ```
+
+## Organisation
+
+- Front End, Mongo / Redis, Backend : Maxime
+- Socket / Room, Backend : Andrew
+
+## Architecture
+
+
+
+## Functionnalities
+
+- Creating/Login a user account
+- Creating a chat room and adding users to it
+- Sending direct messages via sockets
+- Storing messages into mongo
+- Replicata set of the database
+- Storing connections to chat rooms into Redis
+
+## What we learnt
+
+- Socket.io
+- TypeScript
+- VueJs
+- Redis / Mongodb
