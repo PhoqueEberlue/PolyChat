@@ -60,7 +60,7 @@ npm run dev
 
 ## Architecture
 
-
+[Architecture](architecture.png)
 
 ## Functionnalities
 
